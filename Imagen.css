@@ -1,0 +1,50 @@
+body {
+  background: #F0F0F0;
+}
+#Contenedor {
+  margin: 20px auto;
+  width: 80%;
+  height: 90%;
+}
+#Contenedor-Botones {
+  background: #D88AFF;
+  margin: auto;
+  padding: 6px 16px;
+  width: 78%;
+  height: 78px;
+  border-radius: 14px;
+}
+#Contenedor-Botones > input {
+  width: 40px;
+}
+#Contenedor-Botones > button {
+  width: 74px;
+  height: 26px;
+  margin: 6px 8px;
+  border-width: 2px;
+  border-color: #6100B2;
+  border-radius: 6px;
+  background: #B1FF8A;
+  cursor: pointer;
+  transition-duration: 0.8s;
+}
+#Contenedor-Botones > button:hover {
+  border-color: #4E18C2;
+  border-width: 2px;
+  background: #8AF966;
+  box-shadow: 4px 2px 5px #555;
+}
+#Contenedor-Botones > button:focus {
+  outline: none;
+}
+#Canvas {
+  margin: 22px auto;
+  width: 100%;
+}
+#Canvas > canvas {
+  display: block;
+  margin: auto;
+}
+#Result {
+  margin: 0px;
+}
