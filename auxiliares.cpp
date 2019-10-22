@@ -116,5 +116,79 @@ sqPixel obtenerRegionConectada(pixel p, imagen A, int k){
     return proceso[proceso.size()-1];
 }
 
+imagen leeImagen(int num){// lee el archivo Matrices.txt, donde estan una lista de matrices binarias, separada cada una por '**'
+	char lee1 = 0, lee2 = 0;
+	int i = 0, j = 0;
+	imagen res(1, vector<int>(0));
+	ifstream archivo;
+	archivo.open("ImagenesTxt.txt", ios::app);
+	while(!archivo.eof()){
+		archivo >> lee1 >> lee2;
+		if(lee1 == '*' && lee2 == '*'){
+			j++;
+		}else{
+			if(j == num){
+				res[i].push_back(lee1 - '0');
+				if(lee2 == ';'){
+					res.push_back(vector<int>(0));
+					i++;
+				}
+			}
+		}
+	}
+	archivo.close();
+	if(j >= num){
+		res.pop_back();
+		res.pop_back();
+	}
+	return res;
+}
 
+int cantidadPixelesEncendidos(const imagen& A){ //Cuenta la cantidad de pixeles encedidos totales de una imagen valida
+	int cont = 0;
+	for(int i = 0 ; i<A.size() ; i++){
+		for(int j = 0 ; j<A[0].size() ; j++){
+			if(A[i][j] == 1){
+				cont++;
+			}
+		}
+	}
+	return cont;
+}
 
+imagen copiaImagen(const imagen& A){ //Hace una copia independiente de una imagen (NO es una copia por referencia)
+	imagen img;
+	img.push_back(vector<int>(0));
+	for(int i = 0 ; i<A.size() ; i++){
+    	for(int j = 0 ; j<A[0].size() ; j++){
+      		img[i].push_back(A[i][j]);
+    	}
+    	img.push_back(vector<int>(0));
+	}
+	img.pop_back();
+	return img;
+}
+
+void apagaAreaAdj4(imagen &img, int x, int y){ // Apaga los pixeles que comparten area con el pixel de cordenas x, y con adjacencia 4
+	for(int i = -1 ; i<2 ; i++){
+    	if(x+i >= 0 && x+i < img[0].size() && img[y][x+i] == 1){
+    		img[y][x+i] = 0;
+    		apagaAreaAdj4(img, x+i, y);
+    	}
+    	if(y+i >= 0 && y+i < img.size() && img[y+i][x] == 1){
+    		img[y+i][x] = 0;
+    		apagaAreaAdj4(img, x, y+i);
+    	}
+	}
+}
+
+void apagaAreaAdj8(imagen& img, int x, int y){ // Apaga los pixeles que comparten area con el pixel de cordenas x, y con adjacencia 8
+	for(int i = -1 ; i<2 ; i++){
+    	for(int j = -1 ; j<2 ; j++){
+    		if(x+i >= 0 && x+i < img[0].size() && y+j >= 0 && y+j < img.size() && img[y+j][x+i] == 1){
+        		img[y+j][x+i] = 0;
+        		apagaAreaAdj8(img, x+i, y+j);
+        	}
+    	}
+    }
+}

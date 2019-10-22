@@ -28,8 +28,25 @@ bool sonPixelesConectados(const imagen& img, const pixel& p, const pixel& q, int
 // Ejercicio 3
 
 float devolverPromedioAreas(const imagen &A, int k){
-	float prom = -1.0;
-	// TODO --> cuerpo de funcion
+	float prom = 0.0;
+	float pixelesEncendidos = cantidadPixelesEncendidos(A);
+	float cantidadRegiones = 0.0; 
+	if(pixelesEncendidos > 0){
+		imagen img = copiaImagen(A);
+		for (int i = 0; i < img.size(); i++) {
+        	for (int j = 0; j < img[i].size(); j++) {
+				if(img[i][j] == 1){
+					if(k == 4){
+						apagaAreaAdj4(img, j, i);
+					}else{
+						apagaAreaAdj8(img, j, i);
+					}
+					cantidadRegiones++;
+				}
+			}
+		}
+		prom = pixelesEncendidos / cantidadRegiones;
+	}
     return prom;
 }
 
@@ -55,6 +72,3 @@ int obtenerRegionConectada(imagen &A, const pixel &semilla) {
 	// TODO --> cuerpo de funcion
 	return ite;
 }
-
-
-
