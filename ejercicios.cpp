@@ -53,8 +53,17 @@ float devolverPromedioAreas(const imagen &A, int k){
 // Ejercicio 4
 
 sqPixel calcularContorno(const imagen &A, int k){
-    sqPixel edges = {{}};
-	// TODO --> cuerpo de funcion
+    sqPixel edges;
+    imagen img = vector<vector<int> >(A.size(), vector<int>(A[0].size(), 0));
+  	for(int i = 0 ; i<img.size() ; i++){
+    	for(int j = 0 ; j<img[0].size() ; j++){
+      		bool borde = esBorde(A, j, i);
+      		if(A[i][j] == 1 && (borde || existeUnApagadoAdjacente(A, j, i, k, borde))){
+    			img[i][j] = 1;
+      		}
+    	}
+	}
+	edges = secuenciaDual(img);
     return edges;
 }
 

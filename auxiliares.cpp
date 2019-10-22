@@ -139,7 +139,7 @@ imagen leeImagen(int num){// lee el archivo Matrices.txt, donde estan una lista 
 	archivo.close();
 	if(j >= num){
 		res.pop_back();
-		res.pop_back();
+		//res.pop_back();
 	}
 	return res;
 }
@@ -191,4 +191,27 @@ void apagaAreaAdj8(imagen& img, int x, int y){ // Apaga los pixeles que comparte
         	}
     	}
     }
+}
+
+bool esBorde(const imagen &A, int x, int y){
+	return (x == 0 || y == 0 || x >= A[0].size()-1 || y >= A.size()-1);
+}
+
+bool existeUnApagadoAdjacente(const imagen &A, int x, int y, int k, bool borde){
+	bool res = false;
+	if(k == 4){
+		for(int i = -1 ; i<2 ; i++){
+       		res = res || A[y+i][x] == 0;
+  		}
+  		for(int i = -1 ; i<2 ; i++){
+      		res = res || A[y][x+i] == 0;
+  		}
+	}else{
+  		for(int i = -1 ; i<2 ; i++){
+    		for(int j = -1 ; j<2 ; j++){
+        		res = res || A[y+j][x+i] == 0;
+    		}
+  		}
+	}
+	return res;
 }
