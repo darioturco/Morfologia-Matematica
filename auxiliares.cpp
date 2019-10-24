@@ -215,3 +215,65 @@ bool existeUnApagadoAdjacente(const imagen &A, int x, int y, int k, bool borde){
 	}
 	return res;
 }
+
+imagen elementoEstructurante(int size){// devuelve un elemento estructurante de tamaño size
+	return vector<vector<int> > (size, vector<int>(size, 1));
+}
+
+int estructuranteANumero(const imagen &B){
+	return (B.size()-1)/2;
+}
+
+pixel newPixel(int x, int y){
+	pixel px(2);
+	px[0] = x;
+	px[1] = y;
+	return px;
+}
+
+void prendeElementoEstructurante(int x, int y, int elem, imagen &img){
+	for(int i = -elem; i<=elem ; i++){
+    	for(int j = -elem; j<=elem ; j++){
+    		if(pixelValido(newPixel(y+i, x+j), img)){
+        		img[y+i][x+j] = 1;
+      		}
+    	}
+  	}
+}
+
+imagen dilatarConEstructurante(const imagen &A, int elem){
+	imagen img(A.size(), vector<int>(A[0].size(), 0));
+	for(int i = 0 ; i<A.size() ; i++){
+	    for(int j = 0 ; j<A[0].size() ; j++){
+	    	if(A[i][j] == 1){
+	    		prendeElementoEstructurante(j, i, elem, img);
+	    	}
+	    }
+	}
+	return img;
+}
+
+bool estructuranteTocaTodosPrendidos(int x, int y, int elem, const imagen& A){
+	int res = true;
+	for(int i = -elem; i<=elem ; i++){
+		for(int j = -elem; j<=elem ; j++){
+			if(res == true && pixelValido(newPixel(y+i, x+j), A) && A[y+i][x+j] == 0){
+				res = false;
+			}
+		}
+	}
+	return res;
+}
+
+imagen erocionaConEstructurante(const imagen &A, int elem){
+	imagen img(A.size(), vector<int>(A[0].size(), 0));
+	for(int i = 0 ; i<A.size() ; i++){
+		for(int j = 0 ; j<A[0].size() ; j++){
+			if(A[i][j] == 1 && estructuranteTocaTodosPrendidos(j, i, elem, A)){
+				img[i][j] = 1;
+				
+			}
+		}
+	}
+	return img;
+}
