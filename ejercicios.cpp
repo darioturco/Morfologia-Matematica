@@ -20,9 +20,9 @@ bool esImagenValida(const imagen& img) {
 // Ejercicio 2
 
 bool sonPixelesConectados(const imagen& img, const pixel& p, const pixel& q, int k) {
-	bool resp = false;
-
-    return resp;
+    imagen aux1 = imagenDual(obtenerRegionConectadaAux(p, img, k), img.size(), img[0].size());
+    imagen aux2 = imagenDual(obtenerRegionConectadaAux(q, img, k), img.size(), img[0].size());
+    return hayInterseccion(aux1, aux2);
 }
 
 // Ejercicio 3
@@ -78,7 +78,16 @@ void cerrarForma(imagen &A, const imagen &B){
 // Ejercicio 6
 
 int obtenerRegionConectada(imagen &A, const pixel &semilla) {
-	int ite = 0;
-	// TODO --> cuerpo de funcion
-	return ite;
+    imagen fases(A.size(), vector<int>(A[0].size()));
+    fases[semilla[0]][semilla[1]] = 1;
+    vector<sqPixel> proceso = {secuenciaDual(fases)};
+    while(proceso.size() == 1 || proceso[proceso.size()-1] != proceso[proceso.size()-2]){
+        imagen aux = dilatar(fases, 8);
+        imagen xi = interseccion(aux, A);
+        proceso.push_back(secuenciaDual(xi));
+        fases = xi;
+    }
+    proceso.pop_back();
+    A = imagenDual(proceso[proceso.size()-1], A.size(), A[0].size());
+    return proceso.size();
 }
