@@ -1,0 +1,33 @@
+<!DOCTYPE html><html>
+<head>
+  <title>Imagen</title>
+  <script src="Imagen.js"></script>
+  <script src="p5.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script> -->
+  <link href="Imagen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div id="Contenedor">
+    <div id="Contenedor-Botones">
+      <button id="Genera_Imagen_Random" type="button" onclick="imagenRandom()">Random</button>
+      <button id="Genera_Imagen_Islas" type="button" onclick="imagenIslas()">Regiones</button>
+      Size X: <input id="SizeX" type="number" value="10"/>
+      Size Y: <input id="SizeY" type="number" value="10"/>
+      Islas: <input id="Islas" type="number" value="1"/>
+      Proba: <input id="Probavilidad" type="number" value="0.5"/>
+      <br />
+      <button id="Imprime_Imagen" type="button" onclick="imprimeImagen()">Imprime</button>
+      <button id="Promedio_Areas" type="button" onclick="promedioAreas()">Area</button>
+      <button id="Contorno" type="button" onclick="contorno()">Contorno</button>
+      <button id="Cerrar_Forma" type="button" onclick="cerrarForma()">Cerrar</button>
+      <button id="Atraz" type="button" onclick="atraz()">Atraz</button>
+      Adjacencia: <select id="Adjacencia">
+        <option value="4">4</option>
+        <option value="8">8</option>
+      </select>
+    </div>
+    <div id="Canvas"></div>
+    <h4 id="Result"></h4>
+  </div>
+</body>
+</html>

@@ -108,7 +108,7 @@ function dibujaImagen(){
 
 function apagaArea(mataux, x, y, adj){
   if(adj == 4){
-    for(var i = -1 ; i<2 ; i++){
+    for(let i = -1 ; i<2 ; i++){
       if(x+i >= 0 && x+i < mataux[0].length && mataux[y][x+i] == 1){
         mataux[y][x+i] = 0;
         mataux = apagaArea(mataux, x+i, y, adj);
@@ -119,8 +119,8 @@ function apagaArea(mataux, x, y, adj){
       }
     }
   }else{
-    for(var i = -1 ; i<2 ; i++){
-      for(var j = -1 ; j<2 ; j++){
+    for(let i = -1 ; i<2 ; i++){
+      for(let j = -1 ; j<2 ; j++){
         if(x+i >= 0 && x+i < mataux[0].length && y+j >= 0 && y+j < mataux.length && mataux[y+j][x+i] == 1){
           mataux[y+j][x+i] = 0;
           mataux = apagaArea(mataux, x+i, y+j, adj);
@@ -174,15 +174,31 @@ function pulsaMouse(){// funcion que se ejecuta cuando se clickea la imagen
   }
 }
 
-function imprimeImagen(){
-  res_tex.innerHTML = "";
+function imprimeImagen(form = true){
+  if(form){
+    res_tex.innerHTML = "{ ";
+  }else{
+    res_tex.innerHTML = "";
+  }
   for(let i = 0 ; i<matriz.length ; i++){
+    if(form){
+      res_tex.innerHTML += "{";
+    }
     for(let j = 0 ; j<matriz[i].length ; j++){
       res_tex.innerHTML += matriz[i][j] + ",";
     }
-    res_tex.innerHTML = res_tex.innerHTML.substring(0, res_tex.innerHTML.length - 1) + ";<br/>";
+    if(form){
+      res_tex.innerHTML = res_tex.innerHTML.substring(0, res_tex.innerHTML.length - 1) + "},<br/>";
+    }else{
+      res_tex.innerHTML = res_tex.innerHTML.substring(0, res_tex.innerHTML.length - 1) + ";<br/>";
+    }
   }
-  res_tex.innerHTML += "**";
+  if(form){
+    res_tex.innerHTML += "}";
+  }else{
+    res_tex.innerHTML += "**";
+  }
+
 }
 
 function promedioAreas(){//
@@ -301,8 +317,8 @@ function dilatar(){
 }
 function prendeElementoEstructurante(x, y, est, mataux){
   var punto = (est-1)/2;
-  for(var i = -punto; i<=punto ; i++){
-    for(var j = -punto; j<=punto ; j++){
+  for(let i = -punto; i<=punto ; i++){
+    for(let j = -punto; j<=punto ; j++){
       if(estaAdentro(x+j, y+i)){
         mataux[y+i][x+j] = 1;
       }
@@ -314,12 +330,13 @@ function estaAdentro(x, y){
   return x >= 0 && y >= 0 && x < matriz[0].length && y < matriz.length;
 }
 
-
-
-
 function atraz(){
   var mataux = matriz;
   matriz = matrizAtraz;
   dibujaImagen();
   matrizAtraz = mataux;
+}
+
+function help(){
+  console.log("imprimeImegen() \nmatriz = dilatar() \nmatriz = erocionar() \ndibujaImagen()");
 }
