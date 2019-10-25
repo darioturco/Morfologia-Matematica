@@ -66,18 +66,19 @@ imagen elementoEstructuranteDesplazado(int k, pixel p, imagen A) {
     return res;
 }
 
-sqPixel interseccion(imagen A, imagen B){   //se presupone que las imagenes tienen igual dimension
-    sqPixel res;
+imagen interseccion(imagen A, imagen B){   //se presupone que las imagenes tienen igual dimension
+    imagen res(A.size(), vector<int>(A[0].size()));
     for (int i = 0; i < A.size(); i++) {
         for (int j = 0; j < A[0].size(); j++) {
-            if (A[i][j] == 1 && B[i][j] == 1) res.push_back({i,j});
+            if (A[i][j] == 1 && B[i][j] == 1) res[i][j] = 1;
         }
     }
     return res;
 }
 
 bool hayInterseccion(imagen A, imagen B){
-    return interseccion(A,B).size() > 0;
+    sqPixel res = secuenciaDual(interseccion(A, B));
+    return res.size()>0;
 }
 
 imagen dilatar(imagen A, int k) {
@@ -101,19 +102,6 @@ imagen dilatar(imagen A, int k) {
         }
     }
     return imagenDual(res, A.size(), A[0].size());
-}
-
-sqPixel obtenerRegionConectada(pixel p, imagen A, int k){
-    imagen semilla(A.size(), vector<int>(A[0].size()));
-    semilla[p[0]][p[1]] = 1;
-    vector<sqPixel> proceso;
-    while(proceso[proceso.size()-1] != proceso[proceso.size()-2]){
-        sqPixel aux = secuenciaDual(dilatar(semilla, k));
-        sqPixel xi = interseccion(aux, A);
-        proceso.push_back(xi);
-        semilla = imagenDual(xi, A.size(), A[0].size());
-    }
-    return proceso[proceso.size()-1];
 }
 
 imagen leeImagen(int num){// lee el archivo Matrices.txt, donde estan una lista de matrices binarias, separada cada una por '**'
@@ -216,7 +204,7 @@ bool existeUnApagadoAdjacente(const imagen &A, int x, int y, int k, bool borde){
 	return res;
 }
 
-imagen elementoEstructurante(int size){// devuelve un elemento estructurante de tamaño size
+imagen elementoEstructurante(int size){// devuelve un elemento estructurante de tamaÃ±o size
 	return vector<vector<int> > (size, vector<int>(size, 1));
 }
 
@@ -277,3 +265,17 @@ imagen erocionaConEstructurante(const imagen &A, int elem){
 	}
 	return img;
 }
+
+sqPixel obtenerRegionConectadaAux(pixel p, imagen A, int k){ //esta es la version de obtenerRegion conectada que devuelve una secuencia.
+    imagen semilla(A.size(), vector<int>(A[0].size()));
+    semilla[p[0]][p[1]] = 1;
+    vector<sqPixel> proceso = {secuenciaDual(semilla)};
+    while(proceso.size() == 1 || proceso[proceso.size()-1] != proceso[proceso.size()-2]){
+        imagen aux = dilatar(semilla, k);
+        imagen xi = interseccion(aux, A);
+        proceso.push_back(secuenciaDual(xi));
+        semilla = xi;
+    }
+    return proceso[proceso.size()-1];
+}
+
