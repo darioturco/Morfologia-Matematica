@@ -4,7 +4,85 @@
 
 int testEjercicio1(){
 	int cont = 0;
+	imagen img;
+	bool res;
 	
+	//Test 1
+	//Matriz vacia
+	cout << "Empesando test 1 ejericio 1:" << endl;
+	img = { {0,0,0,0,0},
+			{0,0,0,0,0},
+			{0,0,0,0,0},
+			{0,0,0,0,0},
+			{0,0,0,0,0}}
+	res = esImagenValida(img);
+	if(res == false){
+		cont++;
+	}else{
+		cout << "Test 1 ejericio 1 Fallo, esperaba false (0), dio: " << res << endl;
+	}
+	
+	//Test 2
+	//Matriz no valida
+	cout << "Empesando test 2 ejericio 1:" << endl;
+	img = { {0,1,0},
+			{0,0,0,0},
+			{0,0,1,0,0},
+			{0},
+			{0,0}}
+	res = esImagenValida(img);
+	if(res == false){
+		cont++;
+	}else{
+		cout << "Test 2 ejericio 1 Fallo, esperaba false (0), dio: " << res << endl;
+	}
+	
+	//Test 3
+	//Imagen no binaria
+	cout << "Empesando test 3 ejericio 1:" << endl;
+	img = { {-1,0,0,0},
+			{0,2,1,7},
+			{0,3,1,4},
+			{0,1,-1,0}}
+	res = esImagenValida(img);
+	if(res == false){
+		cont++;
+	}else{
+		cout << "Test 3 ejericio 1 Fallo, esperaba false (0), dio: " << res << endl;
+	}
+	
+	//Test 4
+	//Imagen no binaria y no valida
+	cout << "Empesando test 4 ejericio 1:" << endl;
+	img = { {2,0,0,0,5},
+			{0,2},
+			{0,2,2,0},
+			{0,2,8,4},
+			{}}
+	res = esImagenValida(img);
+	if(res == false){
+		cont++;
+	}else{
+		cout << "Test 4 ejericio 1 Fallo, esperaba false (0), dio: " << res << endl;
+	}
+	
+	//Test 5
+	//Imagen valida
+	cout << "Empesando test 5 ejericio 1:" << endl;
+	img = { {0,0,0,0},
+			{0,0,0,0},
+			{0,1,1,0},
+			{0,1,1,0},
+			{0,0,1,0},
+			{0,0,1,0}}
+	res = esImagenValida(img);
+	if(res == true){
+		cont++;
+	}else{
+		cout << "Test 5 ejericio 1 Fallo, esperaba true (1), dio: " << res << endl;
+	}
+	
+	cout << "Fin de los test ejercicio 1, resultado: " << cont;
 	return cont;
 }
 
