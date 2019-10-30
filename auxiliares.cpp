@@ -1,12 +1,10 @@
-//
-//
 #include <cstdlib>
 #include "definiciones.h"
 #include "auxiliares.h"
 
 using namespace std;
 
-sqPixel secuenciaDual(imagen A){
+sqPixel secuenciaDual(const imagen& A){ //Pasa una imagen a secuencia de pixeles
     sqPixel sq = {};
     for (int i = 0; i < A.size(); i++) {
         for (int j = 0; j < A[0].size(); j++) {
@@ -16,7 +14,7 @@ sqPixel secuenciaDual(imagen A){
     return sq;
 }
 
-imagen imagenDual(sqPixel sq, int filas, int columnas){
+imagen imagenDual(const sqPixel& sq, int filas, int columnas){ //Pasa una secuencia de pixeles a imagen
     imagen res(filas, vector<int>(columnas));
     for (int i = 0; i < sq.size(); i++) {
         res[sq[i][0]][sq[i][1]] = 1;
@@ -24,11 +22,11 @@ imagen imagenDual(sqPixel sq, int filas, int columnas){
     return res;
 }
 
-bool pixelValido(pixel p, imagen A){
+bool pixelValido(const pixel& p, const imagen& A){
     return (0 <= p[0] && p[0] < A.size() && 0 <= p[1] && p[1] < A[0].size());
 }
 
-imagen interseccion(imagen A, imagen B){   //se presupone que las imagenes tienen igual dimension
+imagen interseccion(const imagen &A, const imagen& B){ //se presupone que las imagenes tienen igual dimension
     imagen res(A.size(), vector<int>(A[0].size()));
     for (int i = 0; i < A.size(); i++) {
         for (int j = 0; j < A[0].size(); j++) {
@@ -38,12 +36,12 @@ imagen interseccion(imagen A, imagen B){   //se presupone que las imagenes tiene
     return res;
 }
 
-bool hayInterseccion(imagen A, imagen B){
+bool hayInterseccion(const imagen& A, const imagen& B){
     sqPixel res = secuenciaDual(interseccion(A, B));
-    return res.size()>0;
+    return (res.size() > 0);
 }
 
-imagen dilatarConAdyacenciaK(imagen A, int k) {
+imagen dilatarConAdyacenciaK(const imagen& A, int k){
     sqPixel aux = secuenciaDual(A);
     sqPixel res;
     if (k == 8) {
@@ -66,7 +64,6 @@ imagen dilatarConAdyacenciaK(imagen A, int k) {
     return imagenDual(res, A.size(), A[0].size());
 }
 
-
 int cantidadPixelesEncendidos(const imagen& A){ //Cuenta la cantidad de pixeles encedidos totales de una imagen valida
     int cont = 0;
     for(int i = 0 ; i<A.size() ; i++){
@@ -77,19 +74,6 @@ int cantidadPixelesEncendidos(const imagen& A){ //Cuenta la cantidad de pixeles 
         }
     }
     return cont;
-}
-
-imagen copiaImagen(const imagen& A){ //Hace una copia independiente de una imagen (NO es una copia por referencia)
-    imagen img;
-    img.push_back(vector<int>(0));
-    for(int i = 0 ; i<A.size() ; i++){
-        for(int j = 0 ; j<A[0].size() ; j++){
-            img[i].push_back(A[i][j]);
-        }
-        img.push_back(vector<int>(0));
-    }
-    img.pop_back();
-    return img;
 }
 
 void apagaAreaAdj4(imagen &img, int x, int y){ // Apaga los pixeles que comparten area con el pixel de cordenas x, y con adjacencia 4
@@ -147,7 +131,7 @@ int estructuranteANumero(const imagen &B){
     return (B.size()-1)/2;
 }
 
-void prendeElementoEstructurante(int x, int y, imagen &img, const imagen &B){
+void prendeElementoEstructurante(int x, int y, imagen& img, const imagen& B){
     int elem = estructuranteANumero(B);
     for(int i = -elem; i<=elem ; i++){
         for(int j = -elem; j<=elem ; j++){
@@ -158,7 +142,7 @@ void prendeElementoEstructurante(int x, int y, imagen &img, const imagen &B){
     }
 }
 
-imagen dilatar(const imagen &A, const imagen &B){
+imagen dilatar(const imagen& A, const imagen& B){
     imagen img(A.size(), vector<int>(A[0].size(), 0));
     for(int i = 0 ; i<A.size() ; i++){
         for(int j = 0 ; j<A[0].size() ; j++){
@@ -183,21 +167,19 @@ bool estructuranteTocaTodosPrendidos(int x, int y, const imagen& A, const imagen
     return res;
 }
 
-imagen erosionar(const imagen &A, const imagen &B){
+imagen erosionar(const imagen& A, const imagen& B){
     imagen img(A.size(), vector<int>(A[0].size(), 0));
     for(int i = 0 ; i<A.size() ; i++){
         for(int j = 0 ; j<A[0].size() ; j++){
             if(A[i][j] == 1 && estructuranteTocaTodosPrendidos(j, i, A, B)){
                 img[i][j] = 1;
-
             }
         }
     }
     return img;
 }
 
-
-sqPixel obtenerRegionConectadaAux(pixel p, imagen A, int k){ //esta es la version de obtenerRegion conectada que devuelve una secuencia.
+sqPixel obtenerRegionConectadaAux(const pixel& p, const imagen& A, int k){ //esta es la version de obtenerRegion conectada que devuelve una secuencia.
     imagen semilla(A.size(), vector<int>(A[0].size()));
     semilla[p[0]][p[1]] = 1;
     vector<sqPixel> proceso = {secuenciaDual(semilla)};

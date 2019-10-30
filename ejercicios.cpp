@@ -32,7 +32,7 @@ float devolverPromedioAreas(const imagen &A, int k){
 	float pixelesEncendidos = cantidadPixelesEncendidos(A);
 	float cantidadRegiones = 0.0; 
 	if(pixelesEncendidos > 0){
-		imagen img = copiaImagen(A);
+		imagen img = A;
 		for (int i = 0; i < img.size(); i++) {
         	for (int j = 0; j < img[i].size(); j++) {
 				if(img[i][j] == 1){
