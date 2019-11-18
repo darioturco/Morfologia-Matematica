@@ -1,12 +1,11 @@
 #include "definiciones.h"
-#include "ejercicios.h"
 #include "auxiliares.h"
 
 // Ejercicio 1
 
 bool esImagenValida(const imagen& img) {
-	bool resp = true;
-	resp = (img.size() > 0) && (img[0].size() > 0);
+    bool resp = true;
+    resp = (img.size() > 0) && (img[0].size() > 0);
     for (int i = 0; i < img.size(); i++) {
         resp = resp && img[i].size() == img[0].size();
         for (int j = 0; j < img[i].size(); j++) {
@@ -28,25 +27,25 @@ bool sonPixelesConectados(const imagen& img, const pixel& p, const pixel& q, int
 // Ejercicio 3
 
 float devolverPromedioAreas(const imagen &A, int k){
-	float prom = 0.0;
-	float pixelesEncendidos = cantidadPixelesEncendidos(A);
-	float cantidadRegiones = 0.0; 
-	if(pixelesEncendidos > 0){
-		imagen img = A;
-		for (int i = 0; i < img.size(); i++) {
-        	for (int j = 0; j < img[i].size(); j++) {
-				if(img[i][j] == 1){
-					if(k == 4){
-						apagaAreaAdj4(img, j, i);
-					}else{
-						apagaAreaAdj8(img, j, i);
-					}
-					cantidadRegiones++;
-				}
-			}
-		}
-		prom = pixelesEncendidos / cantidadRegiones;
-	}
+    float prom = 0.0;
+    float pixelesEncendidos = (float)cantidadPixelesEncendidos(A);
+    float cantidadRegiones = 0.0;
+    if(pixelesEncendidos > 0){
+        imagen img = A;
+        for (int i = 0; i < img.size(); i++) {
+            for (int j = 0; j < img[i].size(); j++) {
+                if(img[i][j] == 1){
+                    if(k == 4){
+                        apagaAreaAdj4(img, j, i);
+                    }else{
+                        apagaAreaAdj8(img, j, i);
+                    }
+                    cantidadRegiones++;
+                }
+            }
+        }
+        prom = pixelesEncendidos / cantidadRegiones;
+    }
     return prom;
 }
 
@@ -55,24 +54,23 @@ float devolverPromedioAreas(const imagen &A, int k){
 sqPixel calcularContorno(const imagen &A, int k){
     sqPixel edges;
     imagen img = vector<vector<int> >(A.size(), vector<int>(A[0].size(), 0));
-  	for(int i = 0 ; i<img.size() ; i++){
-    	for(int j = 0 ; j<img[0].size() ; j++){
-      		bool borde = esBorde(A, j, i);
-      		if(A[i][j] == 1 && (borde || existeUnApagadoAdjacente(A, j, i, k, borde))){
-    			img[i][j] = 1;
-      		}
-    	}
-	}
-	edges = secuenciaDual(img);
+    for(int i = 0 ; i<img.size() ; i++){
+        for(int j = 0 ; j<img[0].size() ; j++){
+            bool borde = esBorde(A, j, i);
+            if(A[i][j] == 1 && (borde || existeUnApagadoAdjacente(A, j, i, k, borde))){
+                img[i][j] = 1;
+            }
+        }
+    }
+    edges = secuenciaDual(img);
     return edges;
 }
 
 // Ejercicio 5
 
 void cerrarForma(imagen &A, const imagen &B){
-	int elem = estructuranteANumero(B);
-	A = dilatarConEstructurante(A, elem);
-	A = erocionaConEstructurante(A, elem);
+    A = dilatar(A, B);
+    A = erosionar(A, B);
 }
 
 // Ejercicio 6
@@ -82,7 +80,7 @@ int obtenerRegionConectada(imagen &A, const pixel &semilla) {
     fases[semilla[0]][semilla[1]] = 1;
     vector<sqPixel> proceso = {secuenciaDual(fases)};
     while(proceso.size() == 1 || proceso[proceso.size()-1] != proceso[proceso.size()-2]){
-        imagen aux = dilatar(fases, 8);
+        imagen aux = dilatarConAdyacenciaK(fases, 8);
         imagen xi = interseccion(aux, A);
         proceso.push_back(secuenciaDual(xi));
         fases = xi;

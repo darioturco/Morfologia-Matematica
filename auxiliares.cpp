@@ -123,15 +123,11 @@ bool existeUnApagadoAdjacente(const imagen &A, int x, int y, int k, bool borde){
     return res;
 }
 
-imagen elementoEstructurante(int size){// devuelve un elemento estructurante de tamaño size
-    return vector<vector<int> > (size, vector<int>(size, 1));
-}
-
 int estructuranteANumero(const imagen &B){
     return (B.size()-1)/2;
 }
 
-void prendeElementoEstructurante(int x, int y, imagen& img, const imagen& B){
+/*void prendeElementoEstructurante(int x, int y, imagen& img, const imagen& B){
     int elem = estructuranteANumero(B);
     for(int i = -elem; i<=elem ; i++){
         for(int j = -elem; j<=elem ; j++){
@@ -140,18 +136,30 @@ void prendeElementoEstructurante(int x, int y, imagen& img, const imagen& B){
             }
         }
     }
-}
+}*/
 
-imagen dilatar(const imagen& A, const imagen& B){
-    imagen img(A.size(), vector<int>(A[0].size(), 0));
-    for(int i = 0 ; i<A.size() ; i++){
-        for(int j = 0 ; j<A[0].size() ; j++){
-            if(A[i][j] == 1){
-                prendeElementoEstructurante(j, i, img, B);
+bool estructuranteTocaPrendido(const imagen& A, const imagen& B, int x, int y){
+    int elem = estructuranteANumero(B);
+    for(int i = -elem; i<=elem ; i++){
+        for(int j = -elem; j<=elem ; j++){
+            if(pixelValido({y+i, x+j}, A) && A[i+y][j+x] == 1 && B[i+elem][j+elem] == 1){
+                return true;
             }
         }
     }
-    return img;
+    return false;
+}
+
+imagen dilatar(const imagen& A, const imagen& B){
+  imagen img(A.size(), vector<int>(A[0].size(), 0));
+  for(int i = 0 ; i<A.size() ; i++){
+      for(int j = 0 ; j<A[0].size() ; j++){
+          if(estructuranteTocaPrendido(A, B, j, i)){
+              img[i][j] = 1;
+          }
+      }
+  }
+  return img;
 }
 
 bool estructuranteTocaTodosPrendidos(int x, int y, const imagen& A, const imagen& B){
@@ -171,7 +179,7 @@ imagen erosionar(const imagen& A, const imagen& B){
     imagen img(A.size(), vector<int>(A[0].size(), 0));
     for(int i = 0 ; i<A.size() ; i++){
         for(int j = 0 ; j<A[0].size() ; j++){
-            if(A[i][j] == 1 && estructuranteTocaTodosPrendidos(j, i, A, B)){
+            if(estructuranteTocaTodosPrendidos(j, i, A, B)){
                 img[i][j] = 1;
             }
         }
