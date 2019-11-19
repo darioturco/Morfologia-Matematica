@@ -19,9 +19,17 @@ bool esImagenValida(const imagen& img) {
 // Ejercicio 2
 
 bool sonPixelesConectados(const imagen& img, const pixel& p, const pixel& q, int k) {
-    imagen aux1 = imagenDual(obtenerRegionConectadaAux(p, img, k), img.size(), img[0].size());
-    imagen aux2 = imagenDual(obtenerRegionConectadaAux(q, img, k), img.size(), img[0].size());
-    return hayInterseccion(aux1, aux2);
+    bool res = false;
+    if(p[0] == q[0] && p[1] == q[1]){
+        res = true;    
+    }else{
+        if(img[p[0]][p[1]] == 1 && img[q[0]][q[1]] == 1){
+            imagen aux1 = imagenDual(obtenerRegionConectadaAux(p, img, k), img.size(), img[0].size());
+            imagen aux2 = imagenDual(obtenerRegionConectadaAux(q, img, k), img.size(), img[0].size());
+            res = hayInterseccion(aux1, aux2);
+        }
+    }
+    return res;
 }
 
 // Ejercicio 3
